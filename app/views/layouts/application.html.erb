@@ -12,9 +12,8 @@
 <div style="float: left; padding: 1em; border: 1px solid black; width: 15em;">
 <ul style="list-style-type:none; padding-left: 0em;">
 <% if !current_member %>
-  <li><%= link_to "Log In", new_member_session_path %>
 <% else %>
-  <li><%= link_to "My Account", account_path %>
+  <li><%= link_to "Home", :controller => "members", :action => "show", :id => current_member %>
   <% if current_member.admin %>
     <li><%= link_to "Orders List", orders_path %>
     <% if params[:controller] == "orders" %>
@@ -61,7 +60,7 @@
   <li><%= link_to "Members List", members_path %>
   <% end %>
   <li><a href="/pages/member_info">Member-Only Info</a>
-  <li><%= link_to "Logout", member_session_path, :method => :delete, :confirm => "Are you sure you want to logout?" %>
+  <li><%= link_to "Logout", destroy_member_session_path, :method => :delete %>
 <% end %>
 </ul>
 </div>
@@ -72,11 +71,16 @@
   <% if current_member.admin? %>
     Lookout! You have superpowers!
   <% end %>
-  <%= pluralize Member.logged_in.count-1, "other member" %> currently logged in.
 </div>
 <% end %>
 
 <div style="margin-left: 20em;">
+<% if notice %>
+<div class="notice"><%= notice %></div>
+<% end %>
+<% if alert %>
+<div class="alert"><%= alert %></div>
+<% end %>
 <%= yield %>
 </div>
 

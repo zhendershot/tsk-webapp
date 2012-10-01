@@ -6,7 +6,6 @@ gem 'rails'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
-gem 'authlogic'
 gem 'dispatcher'
 
 gem 'calendar_date_select', :git => 'http://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
@@ -15,7 +14,9 @@ gem 'thin'
 
 gem 'active_scaffold'
 gem 'geocoder'
+gem 'authlogic'
 gem 'devise'
+gem 'devise-encryptable'
 gem 'pg'
 # This gem is for moving data easily between databases
 # use rake db:data:dump to dump the data in your current db into a db/data.yaml

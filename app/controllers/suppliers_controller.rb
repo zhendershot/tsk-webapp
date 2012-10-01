@@ -1,5 +1,5 @@
 class SuppliersController < ApplicationController
-  before_filter :require_member
+  before_filter :authenticate_member!
   before_filter :require_admin
 
   # GET /suppliers

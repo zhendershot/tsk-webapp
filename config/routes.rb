@@ -1,13 +1,7 @@
 Secondkitchen::Application.routes.draw do
-  get "pages/member_info"
-  get "pages/contact"
-  get "pages/about"
-  get "pages/calendar"
-  get "pages/blog"
-
-  resource :account, :controller => "members"
-
+  devise_for :members
   resources :members
+
   resources :orders do
     collection do
       get 'all'
@@ -20,14 +14,13 @@ Secondkitchen::Application.routes.draw do
     end
     resources :order_details
   end
-  resource :member_session
+
   resources :stocks
   resources :suppliers
   resources :products
   resources :services
-  resources :account
 
-  root :controller => "member_sessions", :action => "new"
+  root :controller => "members", :action => "index"
   #root :controller => "pages", :action => "blog"
 
   # The priority is based upon order of creation:

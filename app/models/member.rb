@@ -1,5 +1,13 @@
 class Member < ActiveRecord::Base
-  acts_as_authentic
+  # Include default devise modules. Others available are:
+  # :token_authenticatable, :confirmable,
+  # :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  # Setup accessible (or protected) attributes for your model
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name1, :name2, :name3
+
   has_many :orders, :dependent => :destroy
   validates_presence_of :name1, :email
   validates_uniqueness_of :email

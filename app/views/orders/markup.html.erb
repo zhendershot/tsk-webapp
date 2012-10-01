@@ -4,11 +4,13 @@
 
 This report shows sales per week along with the profit and effective profit margin. It only counts
 complete orders (i.e., paid and taken).
+<br><br>
+By: <%= link_to "Year", "/orders/markup?by=year" %> | <%= link_to "Month", "/orders/markup?by=month" %> | <%= link_to "Week", "/orders/markup?by=week" %>
 
 <br><br>
 <table>
 <tr><th>Week<th># Orders<th>Sales<th>Profit<th>Profit Margin</tr>
-<% @by_week.sort{|a,b| b<=>a }.each{ |k,v| %>
+<% @by_period.sort{|a,b| b<=>a }.each{ |k,v| %>
 <tr><td><%= k %><td><%= v[:n] %><td><%= sprintf('%.02f',v[:sales]) %><td><%= sprintf('%.02f',v[:profit]) %><td><%= sprintf('%.02f',100.0*v[:profit]/v[:sales]) %>%</tr>
 <% } %>
 </table>

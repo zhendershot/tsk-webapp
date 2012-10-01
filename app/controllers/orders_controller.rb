@@ -51,15 +51,25 @@ class OrdersController < ApplicationController
     end
   end
 
-  def markup
+  def markup(by="week")
+    by = params[:by].nil? ? "week" : params[:by]
     @orders = Order.scoped_by_taken(true).scoped_by_paid(true).all(:order => "created_at DESC")
-    @by_week = {}    
+    @by_period = {}    
     @orders.each { |o|
       total_cost = 0.0
       total_profit = 0.0
       o.paid_at = o.updated_at if o.paid_at.nil?
       # friday -> thursday is a week!
-      k = (o.paid_at - (o.paid_at.wday+2)*24*3600).strftime("%Y-%m-%d") + " to " + (o.paid_at + (4-o.paid_at.wday)*24*3600).strftime("%Y-%m-%d")
+      if by == "week"
+        k = (o.paid_at - (o.paid_at.wday+2)*24*3600).strftime("%Y-%m-%d") + " to " + (o.paid_at + (4-o.paid_at.wday)*24*3600).strftime("%Y-%m-%d")
+      elsif by == "month"
+        k = o.paid_at.strftime("%Y-%m")
+      elsif by == "year"
+        k = o.paid_at.year.to_s
+      else
+        break
+      end
+      
       o.order_details.each{ |od|
         next if od.archived_cost.nil?
 
@@ -70,10 +80,10 @@ class OrdersController < ApplicationController
         total_cost += orig_cost
         total_profit += orig_cost*(pct/100.0) + cst
       }
-      @by_week[k] = {:sales => 0.0, :profit => 0.0, :n => 0} if @by_week[k].nil?
-      @by_week[k][:n] += 1
-      @by_week[k][:sales] += total_cost
-      @by_week[k][:profit] += total_profit
+      @by_period[k] = {:sales => 0.0, :profit => 0.0, :n => 0} if @by_period[k].nil?
+      @by_period[k][:n] += 1
+      @by_period[k][:sales] += total_cost
+      @by_period[k][:profit] += total_profit
     }
     respond_to do |format|
       format.html # index.html.erb

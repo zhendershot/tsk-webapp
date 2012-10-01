@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   helper :all
   helper_method :current_member_session, :current_member
-  filter_parameter_logging :password, :password_confirmation
 
   private
 
@@ -44,7 +43,7 @@ class ApplicationController < ActionController::Base
   end
 
   def store_location
-    session[:return_to] = request.request_uri
+    session[:return_to] = "#{request.protocol}#{request.host_with_port}#{request.fullpath}"
   end
     
   def redirect_back_or_default(default)

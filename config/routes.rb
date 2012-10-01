@@ -30,7 +30,6 @@ Secondkitchen::Application.routes.draw do
   resources :services
 
   root :controller => "members", :action => "index"
-  #root :controller => "pages", :action => "blog"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

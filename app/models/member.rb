@@ -1,7 +1,6 @@
 class Member < ActiveRecord::Base
   acts_as_authentic
   has_many :orders, :dependent => :destroy
-  has_many :fees, :dependent => :destroy
   validates_presence_of :name1, :email
   validates_uniqueness_of :email
 

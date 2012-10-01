@@ -13,6 +13,17 @@ gem 'calendar_date_select', :git => 'http://github.com/paneq/calendar_date_selec
 
 gem 'thin'
 
+gem 'active_scaffold'
+gem 'geocoder'
+gem 'devise'
+gem 'pg'
+# This gem is for moving data easily between databases
+# use rake db:data:dump to dump the data in your current db into a db/data.yaml
+# use rake db:data:load to load the data in that file into your current db
+gem 'yaml_db'
+gem 'paperclip', '~> 3.1'
+gem 'gmaps4rails'
+
 # Use unicorn as the web server
 # gem 'unicorn'
 

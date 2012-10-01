@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @product.name %>
+</p>
+
+<p>
+  <b>Category:</b>
+  <%= @product.category %>
+</p>
+
+<p>
+  <b>Units:</b>
+  <%= @product.units %>
+</p>
+
+<p>
+  <b>Density (g/ml):</b>
+  <%= @product.density_g_per_ml %>
+</p>
+
+<p>
+  <b>Servings/unit:</b>
+  <%= @product.servings_per_unit %>
+</p>
+
+<table>
+<tr><th>Name<th>Total Quantity Ordered
+<% 
+by_member = {}
+OrderDetail.where(:stock_id => Stock.find_all_by_product_id(@product.id).collect{ |s| s.id }).each{ |od| 
+  mib = od.order.member.id
+  by_member[mib] = 0.0 if by_member[mib].nil?
+  by_member[mib] += od.quantity
+}
+by_member.sort{ |a,b| b[1] <=> a[1] }.each{ |mib,q|
+%>
+<tr><td><%= Member.find(mib).name %><td><%= q %>
+<% } %>
+</table>
+<br>
+
+<%= link_to 'Edit', edit_product_path(@product) %> |
+<%= link_to 'Back', products_path %>

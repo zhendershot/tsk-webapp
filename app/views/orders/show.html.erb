@@ -1,0 +1,85 @@
+<h1>Order <%= @order.id %></h1>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Date:</b>
+  <%= @order.created_at.strftime('%Y-%m-%d') %>
+</p>
+
+<p>
+  <b>Member:</b>
+  <%= @order.member.name %>
+</p>
+
+<p>
+  <b>Cost:</b>
+  <%= @order.cost.nil? ? '?' : sprintf('$%.02f',@order.cost) %>
+</p>
+
+<p>
+  <b>Paid:</b>
+  <%= @order.paid ? "Yes, at #{@order.paid_at.nil? ? "?" : @order.paid_at.localtime.strftime('%Y-%m-%d %H:%M')} and marked by #{@order.marked_paid_by.nil? ? "?" : @order.marked_paid_by.name}" : 'No' %> <% if @order.paid_with_paypal %>(with Paypal)<% end %>
+</p>
+
+<p>
+  <b>Taken:</b>
+  <%= @order.taken ? "Yes, at #{@order.taken_at.localtime.strftime('%Y-%m-%d %H:%M')}" : 'No' %>
+</p>
+
+<p>
+  <b>Archived:</b>
+  <%= @order.archived ? "Yes" : 'No' %> (Taken orders are automatically archived)
+</p>
+
+<p>
+  <b>Planned Pickup Date:</b>
+  <%= @order.pickup_on.nil? ? "None specified" : @order.pickup_on.strftime('%Y-%m-%d') %>
+</p>
+
+<p>
+  <b>Notes:</b>
+  <%= @order.notes %>
+</p>
+
+
+<h2>Order Details</h2>
+<table>
+<tr><th>Quantity<th>Item<th>Units<th>Weight (g)<th>Cost<th>Extension</tr>
+<% 
+  pretax = 0.0
+  @order.order_details.each do |item| %>
+<tr>
+<td><%= item.quantity %>
+<% unless @order.archived %>
+  <% if item.stock.nil? %>
+    <td colspan=4>Stock was Deleted :(</td>
+  <% else %>
+    <td><%= item.stock.name %>
+    <td><%= item.stock.product.units %>
+    <td><% g = item.stock.grams(item.quantity,item.stock.product)
+           unless g.nil? %><%= g.round %><% end %>
+    <td><%= sprintf('$%.02f',item.stock.final_cost) %>
+    <td><%= sprintf('$%.02f',item.stock.final_cost*item.quantity) %>
+  <% end %>
+<% else %>
+  <td><%= item.archived_name %>
+  <td><%= item.archived_product.units %>
+  <td><% g = item.stock.grams(item.quantity,item.archived_product)
+         unless g.nil? %><%= g.round %><% end %>
+  <td><%= sprintf('$%.02f',item.archived_cost) %>
+  <td><%= sprintf('$%.02f',item.archived_cost*item.quantity) %>
+<% end %>
+</tr>
+<% end %>
+</table>
+
+<br>
+Net Cost: <%= sprintf('$%.02f',@order.pretax_cost) %><br>
+Sales Tax: <%= sprintf('$%.02f',@order.tax) %><br>
+Total Cost: <%= sprintf('$%.02f',@order.cost) %><br>
+
+<br />
+
+<%= link_to image_tag("/images/back_button.s.png",:border=>0), orders_path %>
+<%= link_to image_tag("/images/edit_button.s.png",:border=>0), edit_order_path(@order) %>

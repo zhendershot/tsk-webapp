@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name:</b>
+  <%= @stock.name %>
+</p>
+
+<p>
+  <b>Quantity:</b>
+  <%= @stock.quantity %>
+</p>
+
+<p>
+  <b>Cost:</b>
+  <%= @stock.cost %>
+</p>
+
+<p>
+  <b>Origin:</b>
+  <%= @stock.origin %>
+</p>
+
+<% unless @stock.supplier.nil? %>
+<p>
+  <b>Supplier:</b>
+  <%= @stock.supplier.name %>
+</p>
+<% end %>
+
+<% unless @stock.product.nil? %>
+<p>
+  <b>Product Type:</b>
+  <%= @stock.product.name %>
+</p>
+<% end %>
+
+<p>
+  <b>Limited Item:</b>
+  <%= @stock.limited ? "Yes" : "No" %>
+</p>
+
+<%= link_to image_tag("/images/back_button.s.png",:border=>0), stocks_path %>
+
+<%= link_to image_tag("/images/edit_button.s.png",:border=>0), edit_stock_path(@stock) %>

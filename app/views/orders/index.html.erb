@@ -1,0 +1,68 @@
+<h1>Orders List</h1>
+
+<p id="notice"><%= notice %></p>
+
+<% if current_member.admin %>
+Past orders are used to estimate demand and generate reports, so please don't delete them :).<br><br>
+<% end %>
+
+<table>
+  <tr>
+    <th>Member</th>
+    <th>Date Placed</th>
+    <th>Planned Pickup</th>
+    <th>Paid</th>
+    <th>Taken</th>
+    <th>Cost</th>
+    <th>Notes</th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @orders.each do |order| %>
+  <tr>
+    <td><%= order.member.name %></td>
+    <td><%= order.created_at.strftime('%Y-%m-%d') %></td>
+    <td><%= order.pickup_on.nil? ? "Not specified" : order.pickup_on.strftime('%A %b %d') %></td>
+    <td><% if current_member.admin? %>
+      <div style="text-align: center;">
+      <a href="/orders/<%= order.id %>/toggle_paid?paypal=0"><%= image_tag("/images/check_" + (order.paid ? "on" : "off") + ".s.png",:border=>0) %></a>
+      <a href="/orders/<%= order.id %>/toggle_paid?paypal=1"><%= image_tag("/images/pp_check_" + (order.paid_with_paypal ? "on" : "off") + ".s.png",:border=>0) %></a>
+      </div>
+    <% end %>
+    </div>
+   </td>
+    <td>
+    <div style="text-align: center;">
+    <% if current_member.admin? %>
+      <a href="/orders/<%= order.id %>/toggle_taken"><%= image_tag("/images/check_" + (order.taken ? "on" : "off") + ".s.png",:border=>0) %></a>
+    <% end %>
+    </div>
+    </td>
+    <td><%= sprintf('$%.02f',order.cost) %></td>
+    <td><%= order.notes %></td>
+    <td><%= link_to image_tag("/images/view_button.s.png",:border=>0), order %><br>
+        <%= link_to image_tag("/images/edit_button.s.png",:border=>0), edit_order_path(order) %><br>
+        <%= link_to image_tag("/images/nix_button.s.png",:border=>0), order, :confirm => 'Are you sure?', :method => :delete %><br>
+    </td>
+    <% if current_member.admin or (!order.paid and !order.taken) %>
+    <td>
+     <% unless order.paid %>
+     <form action="https://www.paypal.com/cgi-bin/webscr" method="post">  
+        <input type="hidden" name="cmd" value="_xclick">  
+        <input type="hidden" name="business" value="thesecondkitchen@gmail.com">  
+        <input type="hidden" name="item_name" value="Second Kitchen Order #<%= order.id %> for <%= order.member.name %>">  
+        <input type="hidden" name="amount" value="<%= sprintf("%.02f",order.paypal_cost) %>">  
+        <!-- <input type="hidden" name="notify_url" value=""> -->
+        <input type="image" name="submit" border="0"  
+             src="https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif"  
+             alt="PayPal - The safer, easier way to pay online">  
+      </form>
+      <div style="text-align: center; font-size: 8pt;">(<%= sprintf("$%.02f",order.paypal_cost) %> w/fees)</div>
+     <% end %>
+    <% else %>
+    <td colspan=3>
+    <% end %>
+  </tr>
+<% end %>
+</table>

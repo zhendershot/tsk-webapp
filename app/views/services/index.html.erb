@@ -1,0 +1,23 @@
+<h1>Listing Member Workshare</h1>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Member</th>
+    <th>Hours</th>
+    <th>Task</th>
+    <th>Observed By</th>
+    <th></th>
+  </tr>
+
+<% @services.each do |service| %>
+  <tr>
+    <td><%= service.did_at.nil? ? service.created_at.strftime('%Y-%m-%d') : service.did_at.strftime('%Y-%m-%d') %></td>
+    <td><%= service.member.name %></td>
+    <td><%= service.hours %></td>
+    <td><%= service.task %></td>
+    <td><%= service.observed_by.nil? ? "?" : service.observed_by.name %></td>
+    <td><%= link_to image_tag("/images/nix_button.s.png",:border=>0), service, :confirm => 'Are you sure?', :method => :delete %><br>
+  </tr>
+<% end %>
+</table>

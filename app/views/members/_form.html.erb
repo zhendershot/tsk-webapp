@@ -1,0 +1,60 @@
+<%= form_for(@member) do |f| %>
+  <% if @member.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@member.errors.count, "error") %> prohibited this member from being saved:</h2>
+
+      <ul>
+      <% @member.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name1 %><br />
+    <%= f.text_field :name1 %>
+  </div>
+  <div class="field">
+    <%= f.label :name2 %><br />
+    <%= f.text_field :name2 %>
+  </div>
+  <div class="field">
+    <%= f.label :name3 %><br />
+    <%= f.text_field :name3 %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email %>
+  </div>
+  <div class="field">
+    <%= f.label :extra_emails %><br />
+    <%= f.text_field :extra_emails %>
+  </div>
+  <div class="field">
+    <%= f.label :phone %><br />
+    <%= f.text_field :phone %>
+  </div>
+  <div class="field">
+    <%= f.label :password %><br />
+    <%= f.password_field :password %>
+  </div>
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation %>
+  </div>
+  <% if current_member.admin %>
+    <div class="field">
+      <%= f.label :active %><br />
+      <%= f.check_box :active %>
+    </div>
+    <div class="field">
+      <%= f.label :admin %><br />
+      <%= f.check_box :admin %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= image_submit_tag("/images/save_button.s.png",:border=>0) %>
+  </div>
+<% end %>

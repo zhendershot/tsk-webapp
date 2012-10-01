@@ -1,0 +1,38 @@
+<%= form_for(@service) do |f| %>
+  <% if @service.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@service.errors.count, "error") %> prohibited this service from being saved:</h2>
+
+      <ul>
+      <% @service.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :when %> (Like: 2011-07-13)<br />
+    <%= f.calendar_date_select :did_at, :time => false %>
+  </div>
+
+  <table>
+  <tr><th>Hours<th>Name<th>Task</tr>
+  <%
+  # precompute quantities to speed things up a bit
+  Member.scoped_by_active(true).all(:order => :name1).each{ |member|
+  %>
+    <tr>
+    <td><input type="text" name="service[hours][<%= member.id %>]" 
+               id="service_hours_<%= member.id %>" size=4"/>
+    <td><%= member.name %>
+    <td><input type="text" name="service[task][<%= member.id %>]" 
+               id="service_task_<%= member.id %>" size="30"/>
+  <% } %>
+  </table>
+
+  <br />
+  <div class="actions">
+    <%= image_submit_tag("/images/save_button.s.png",:border=>0) %>
+  </div>
+<% end %>

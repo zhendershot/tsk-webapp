@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  member: 
+  hours: 9.99
+  task: MyString
+
+two:
+  member: 
+  hours: 9.99
+  task: MyString

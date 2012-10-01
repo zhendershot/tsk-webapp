@@ -1,0 +1,91 @@
+<%= form_for(@order) do |f| %>
+  <% if @order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@order.errors.count, "error") %> prohibited this order from being saved:</h2>
+
+      <ul>
+      <% @order.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if current_member.admin %>
+   <div class="field">
+     <%= f.label :member %><br />
+     <%= f.select :member_id, Member.all.collect{ |e| [e.name,e.id] } %>
+   </div>
+ 
+   <div class="field">
+     <%= f.label :paid %><br />
+     <%= f.check_box :paid %>
+   </div>
+ 
+   <div class="field">
+     <%= f.label :taken %><br />
+     <%= f.check_box :taken %>
+   </div>
+ 
+   <div class="field">
+     <%= f.label :paid_with_paypal %><br />
+     <%= f.check_box :paid_with_paypal %>
+   </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :will_pickup_on %><br />
+    <% CalendarDateSelect.format=(:iso_date)%>
+    <%= f.calendar_date_select :pickup_on, :valid_date_check => "date.getDay() == 0 || date.getDay() == 3", :time => false %>
+  </div>
+
+  <h2>Order Items</h2>
+  <div id="order_details">
+  <table>
+
+  <% 
+  # precompute quantities to speed things up a bit
+  quantity_hash = {}
+  @order.order_details.each{ |od| quantity_hash[od.stock_id] = od.quantity }
+  %>
+
+  <tr><th>Quantity<th>Name<th>Cost/Unit<th>Stock<th>Origin/Supplier</tr>
+  <% n = 0 
+     last_category = nil %>
+  <% Stock.where("(limited = 'f') OR (limited = 't' AND quantity > 0.0)",:order => "product_id,name").sort{ |x,y|
+      a = x.product.nil? ? "Unknown" : x.product.category
+      b = y.product.nil? ? "Unknown" : y.product.category
+      a <=> b
+    }.each{ |e|
+      cat = e.product.nil? ? "Unknown" : e.product.category
+      if cat != last_category
+        last_category = cat
+      %>
+    <tr><th colspan=5 style="background: lightblue;"><%= cat.capitalize %></th></tr>
+    <% end %>
+
+    <tr>
+    <td><input type="text" name="order[order_details_attributes][<%= n %>][quantity]" 
+               id="order_order_details_attributes_<%= n %>_quantity" size=4 value="<%= quantity_hash[e.id].nil? ? "" : quantity_hash[e.id] %>"/>
+    <input type="hidden" name="order[order_details_attributes][<%= n %>][stock_id]" 
+           id="order_order_details_attributes_<%= n %>_stock_id" value="<%= e.id %>"/>
+    <td><%= e.name %>
+    <td><%= sprintf('$%.02f',e.final_cost) %>/<%= e.product.units %>
+    <td><%= e.quantity %>
+    <td><%= e.origin %>/<%= e.supplier.name %>
+    <% n += 1 %>
+  <% } %>
+  </table>
+  </div>
+
+  <br /><br />
+
+  <div class="field">
+    <%= f.label :notes %><br />
+    <%= f.text_area :notes, :rows => 3 %>
+  </div>
+
+  <div class="actions">
+    <%= image_submit_tag("/images/save_button.s.png") %>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  units: MyString
+  quantity: 9.99
+  cost: 9.99
+  origin: MyString
+  supplier: MyString
+
+two:
+  name: MyString
+  units: MyString
+  quantity: 9.99
+  cost: 9.99
+  origin: MyString
+  gupplier: MyString

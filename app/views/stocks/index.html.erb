@@ -1,0 +1,82 @@
+<h1>Current Stock</h1>
+
+<% if current_member.admin %>
+Note: If you destroy a stock item, all unarchived orders associated with that stock item will lose any parts that reference it.<br /><br />
+<% end %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Quantity</th>
+    <th>Units</th>
+    <th>Limited</th>
+    <th>Cost per unit</th>
+    <th>Markup</th>
+    <th>Final Cost</th>
+    <th>Value</th>
+    <th>Origin</th>
+    <th>Supplier</th>
+    <th>Product</th>
+    <th>Added On</th>
+    <th>Associated Orders</th>
+    <th>Average Weekly Demand</th>
+    <th>Weeks Until Depleted</th>
+    <th></th>
+    <% if current_member.admin %>
+    <th></th>
+    <th></th>
+    <% end %>
+  </tr>
+
+<% total_value = 0.0
+   total_final_value = 0.0
+   last_category = nil
+   @stocks.each do |stock|
+     total_value += stock.quantity*stock.cost unless stock.quantity <= 0
+     total_final_value += stock.quantity*stock.final_cost unless stock.quantity <= 0
+     cat = stock.product.nil? ? "Unknown" : stock.product.category
+  %>
+  <% if cat != last_category 
+       last_category = cat
+  %>
+  <tr><th colspan=18 style="background: lightblue;"><%= cat.capitalize %></th></tr>
+  <% end %>
+  <tr>
+    <td><%= stock.name %></td>
+    <td style="background: <%= stock.quantity <= 0 ? 'orange' : 'white' %>;">
+      <%= stock.quantity %></td>
+    <td><%= stock.product.nil? ? "?" : stock.product.units %></td>
+    <td><% if stock.limited %><div style="text-align: center;"><img src="/images/check_on.s.png"></div><% end %></td>
+    <td><%= sprintf('$%.02f',stock.cost) %></td>
+    <td><% if stock.markup_pct > 0 %><%= sprintf('%.02f%%',stock.markup_pct) %><% end %> 
+        <% if stock.markup_const > 0 %>+ <%= sprintf('$%.02f',stock.markup_const) %><% end %></td>
+    <td><%= sprintf('$%.02f',stock.final_cost) %></td>
+    <td><% if stock.quantity > 0 %><%= sprintf('$%.02f',stock.quantity*stock.final_cost) %><% end %></td>
+    <td><%= stock.origin %></td>
+    <td><%= stock.supplier.nil? ? "?" : stock.supplier.name %></td>
+    <td><%= stock.product.nil? ? "?" : stock.product.name %></td>
+    <td><%= stock.created_at.strftime('%Y-%m-%d') %></td>
+    <td><%= stock.order_details.length %>
+    <td><% weeks = {}
+           stock.order_details.each do |od|
+             w = od.updated_at.strftime('%U')
+             weeks[w] = 0.0 if weeks[w].nil?
+             weeks[w] += od.quantity
+           end
+           k = weeks.length == 0 ? 0 : weeks.values.sum/weeks.length
+         %><% unless k == 0 %><%= sprintf('%.01f',k) %><% else %>Not sure yet.<% end %>
+    <td style="background: <%= k > 0 and stock.quantity/k < 2 ? "yellow" : "white" %>;"><% unless k == 0 %><%= (stock.quantity/k).floor %><% else %> Not sure yet. <% end %>
+    <td><%= link_to image_tag("/images/view_button.s.png",:border=>0), stock %></td>
+    <% if current_member.admin %>
+    <td><%= link_to image_tag("/images/edit_button.s.png",:border=>0), edit_stock_path(stock) %></td>
+    <td><%= link_to image_tag("/images/nix_button.s.png",:border=>0), stock, :confirm => 'Are you sure?', :method => :delete %></td>
+    <% end %>
+  </tr>
+<% end %>
+</table>
+
+<br />
+Current <a href="http://www.bouldercolorado.gov/index.php?option=com_content&task=view&id=3164&Itemid=1499">sales tax rate</a>: <%= Order::SalesTax %>%<br>
+Total capital invested in stock: <%= sprintf('$%.02f',total_value) %><br>
+Total redeemable value if sold: <%= sprintf('$%.02f',total_final_value) %><br>
+Estimated Profit: <%= sprintf('$%.02f',total_final_value-total_value) %> with margin <%= sprintf('%.02f',100.0*(total_final_value-total_value)/total_final_value) %>%

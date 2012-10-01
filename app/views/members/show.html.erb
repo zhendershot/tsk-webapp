@@ -1,0 +1,72 @@
+<h1><%= @member.id == current_member.id ? 'Your Member Info' : "Member " + @member.id.to_s %></h1>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Name(s):</b>
+  <%= @member.name %>
+</p>
+
+<p>
+  <b>Primary Email:</b>
+  <%= @member.email %>
+</p>
+
+<p>
+  <b>Other Emails:</b>
+  <%= @member.extra_emails %>
+</p>
+
+<p>
+  <b>Phone Number:</b>
+  <%= @member.phone %>
+</p>
+
+<% 
+product_stats = {}
+product_sort = {}
+week_stats = {}
+Order.find_all_by_member_id(@member.id).each do |o|
+  w = o.updated_at.strftime('%U') 
+  week_stats[w] = {:n => 0, :cost => 0.0} if week_stats[w].nil?
+  week_stats[w][:n] += 1
+  week_stats[w][:cost] += o.cost
+  o.order_details.each{ |od|
+    next if od.stock.nil?
+    pid = o.archived ? od.archived_product.id : od.stock.product.id
+    product_stats[pid] = 0.0 if product_stats[pid].nil?
+    product_stats[pid] += od.quantity
+    product_sort[pid] = 0.0 if product_sort[pid].nil?
+    g = o.archived ? od.stock.grams(od.quantity,od.archived_product) : od.stock.grams(od.quantity,od.stock.product)
+    product_sort[pid] += g unless g.nil?
+  }
+end 
+psort = product_stats.sort{ |a,b| product_sort[b[0]] <=> product_sort[a[0]] }
+if week_stats.length > 0
+%>
+You have made <%= week_stats.collect{ |k,v| v[:n] }.sum %> orders, and have been a member for <%= @member.days_as_member %> days.
+<br><br>
+On average, you spend <%= sprintf('$%.02f',week_stats.collect{ |k,v| v[:cost] }.sum/(@member.days_as_member/30.0)) %> dollars a month at the co-op. And, you have spent <%= sprintf('$%.02f',week_stats.collect{ |k,v| v[:cost] }.sum) %> total.
+<br><br>
+Here are some statistics on what you've ordered:<br><br>
+<table>
+<tr><th>Product<th>Total Purchased<th>Average per Week</tr>
+<% psort.each do |k,v| 
+     p = Product.find_by_id(k) %>
+<tr><td><%= p.name %><td><%= v.round %> <%= p.units %> <% unless product_sort[p.id] == 0.0 %>(<%= product_sort[p.id].round %> g)<% end %>
+    <td><%= sprintf('%.02f',v/(@member.days_as_member/7.0)) %> <%= p.units %>
+<% end %>
+</table>
+<% else %>
+You haven't ordered anything. That's awfully boring...
+<% end %>
+<br><br>
+You have worked <%= sprintf("%.02f",@member.service_total) %> hours for the co-op since <%= Member::ServiceStartDate.strftime('%m/%d/%Y') %>, which works out to <%= sprintf("%.02f",@member.service_per_month) %> hours per month. 
+<% if @member.service_balance > 0 %>
+<b><br>Hence, you owe the co-op <%= @member.service_balance %> hours.</b>
+<% end %>
+<br><br>
+<%= link_to image_tag("/images/back_button.s.png",:border=>0), members_path %>
+<% if current_member.admin or @member.id == current_member.id %>
+<%= link_to image_tag("/images/edit_button.s.png",:border=>0), edit_member_path(@member) %>
+<% end %>

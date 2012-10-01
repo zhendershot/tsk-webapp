@@ -1,0 +1,12 @@
+<div class="order_detail">
+<% pf.fields_for :order_details, order_detail do |f| %>
+  <% q = f.object.quantity.nil? ? 0.0 : f.object.quantity %>
+  <p>
+    <%= f.text_field :quantity, :size => 4 %>
+    <%= f.select :stock_id, Stock.where("(limited = 'f') OR (limited = 't' AND quantity > #{0.0-q})",:order => "name").collect{ |e| 
+          ["#{e.name} (#{sprintf('$%.02f',e.cost)}/#{e.product.units}) [#{e.origin}/#{e.supplier.name}]",e.id] 
+        } %>
+    <%= link_to_function image_tag("/images/nix_button.s.png",:style=>"border:0;text-decoration:none;"), "$(this).up('.order_detail').remove()" %>
+  </p>
+<% end %>
+</div>

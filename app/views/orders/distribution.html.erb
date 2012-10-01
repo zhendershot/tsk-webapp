@@ -1,0 +1,17 @@
+<h1>Distribution Report</h1>
+
+<p id="notice"><%= notice %></p>
+
+These are orders that have been paid but have not been taken...
+<br><br>
+<% @by_stock.each{ |pickup_on,data| %>
+<table>
+<h2><%= pickup_on.strftime('%m/%d/%Y') %></h2>
+  <% data.each{ |sid,ods| %>
+<tr><th colspan=3><%= ods[0].stock.name %> - <%= ods[0].stock.supplier.name %></td></tr>
+  <%   ods.each{ |od| %>
+      <tr><td><%= od.order.member.name %><td><%= od.quantity %><td><%= od.stock.product.units %></tr>
+  <%   } %>
+<%   } %>
+</table>
+<% } %>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The Second Kitchen</title>
+  <%= stylesheet_link_tag :all %>
+  <%= javascript_include_tag :defaults %>
+  <%= calendar_date_select_includes %>
+  <%= csrf_meta_tag %>
+</head>
+<body>
+
+<div style="float: left; padding: 1em; border: 1px solid black; width: 15em;">
+<ul style="list-style-type:none; padding-left: 0em;">
+<% if !current_member %>
+  <li><%= link_to "Log In", new_member_session_path %>
+<% else %>
+  <li><%= link_to "My Account", account_path %>
+  <% if current_member.admin %>
+    <li><%= link_to "Orders List", orders_path %>
+    <% if params[:controller] == "orders" %>
+     <ul>
+       <li><%= link_to "Show All", :controller => "orders", :all => 1 %>
+       <li><%= link_to "Distribution", :controller => "orders", :action => "distribution" %>
+       <li><%= link_to "Markup Report", :controller => "orders", :action => "markup" %>
+       <li><%= link_to "New Order", :controller => "orders", :action => "new" %>
+     </ul>
+    <% end %>
+    <li><%= link_to "Members List", members_path %>
+    <% if params[:controller] == "members" %>
+     <ul>
+       <li><%= link_to "New Member", :controller => "members", :action => "new" %>
+     </ul>
+    <% end %>
+    <li><%= link_to "Manage Stock", stocks_path %>
+    <% if params[:controller] == "stocks" or params[:controller] == "products" or params[:controller] == "suppliers"%>
+     <ul>
+       <li><%= link_to "New Stock Item", :controller => "stocks", :action => "new" %>
+       <li><%= link_to "New Product", :controller => "products", :action => "new" %>
+       <li><%= link_to "New Supplier", :controller => "suppliers", :action => "new" %>
+       <li><%= link_to "List Suppliers", suppliers_path %>
+       <li><%= link_to "List Products", products_path %>
+     </ul>
+    <% end %>
+    <li><%= link_to "Manage Workshare", services_path %>
+    <% if params[:controller] == "services" %>
+     <ul>
+       <li><%= link_to "Add Observed Work", :controller => "services", :action => "new" %>
+     </ul>
+    <% end %>
+  <% else %>
+  <li><%= link_to "My Orders", orders_path %>
+  <% if params[:controller] == "orders" or params[:controller] == "stocks" %>
+   <ul>
+     <li><%= link_to "Past Orders", :controller => "orders", :all => 1 %>
+     <li><%= link_to "Distribution", :controller => "orders", :action => "distribution" %>
+     <li><%= link_to "View Stock", stocks_path %>
+     <li><%= link_to "New Order", :controller => "orders", :action => "new" %>
+
+   </ul>
+  <% end %>
+  <li><%= link_to "Members List", members_path %>
+  <% end %>
+  <li><a href="/pages/member_info">Member-Only Info</a>
+  <li><%= link_to "Logout", member_session_path, :method => :delete, :confirm => "Are you sure you want to logout?" %>
+<% end %>
+</ul>
+</div>
+
+<% if current_member %>
+<div style="color: grey; font-size: 9pt; clear:both; text-align: center; float: left; width: 15em; padding: 1em;">
+  Logged in as: <%= current_member.name %> (<%= current_member.email %>).
+  <% if current_member.admin? %>
+    Lookout! You have superpowers!
+  <% end %>
+  <%= pluralize Member.logged_in.count-1, "other member" %> currently logged in.
+</div>
+<% end %>
+
+<div style="margin-left: 20em;">
+<%= yield %>
+</div>
+
+</body>
+</html>

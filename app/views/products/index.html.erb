@@ -1,0 +1,27 @@
+<h1>Listing products</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Units</th>
+    <th>Density (g/ml)</th>
+    <th>Servings/unit</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @products.each do |product| %>
+  <tr>
+    <td><%= product.name %></td>
+    <td><%= product.category %></td>
+    <td><%= product.units %> (<%= product.unit_type %>)</td>
+    <td><%= product.density_g_per_ml %></td>
+    <td><%= product.servings_per_unit %></td>
+    <td><%= link_to 'Show', product %></td>
+    <td><%= link_to 'Edit', edit_product_path(product) %></td>
+    <td><%= link_to 'Destroy', product, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>

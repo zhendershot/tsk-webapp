@@ -1,5 +1,4 @@
 class ServicesController < ApplicationController
-  before_filter :authenticate_member!
   before_filter :require_admin
 
   # GET /services

@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  sales_tax: 9.99
+  global_markup_percent: 9.99
+  paypal_fee_percent: 9.99
+  paypal_fee_per: 9.99
+  pickup_dows: MyString
+
+two:
+  sales_tax: 9.99
+  global_markup_percent: 9.99
+  paypal_fee_percent: 9.99
+  paypal_fee_per: 9.99
+  pickup_dows: MyString

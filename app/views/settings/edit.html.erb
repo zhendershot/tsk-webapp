@@ -1,0 +1,35 @@
+<h1>Settings</h1>
+<%= form_for(@settings) do |f| %>
+  <div class="field">
+    <%= f.label :sales_tax %><br />
+    <%= f.text_field :sales_tax %>
+  </div>
+  <div class="field">
+    <%= f.label :global_markup_percent %><br />
+    <%= f.text_field :global_markup_percent %>
+  </div>
+  <div class="field">
+    <%= f.label :paypal_fee_percent %><br />
+    <%= f.text_field :paypal_fee_percent %>
+  </div>
+  <div class="field">
+    <%= f.label :paypal_fee_per_transaction %><br />
+    <%= f.text_field :paypal_fee_per %>
+  </div>
+  <div class="field">
+    <%= f.label :required_workshare_hours_per_month %><br />
+    <%= f.text_field :workshare_hours_per_month %>
+  </div>
+
+
+  <div class="field">
+    <%= f.label :allow_pickups_on %><br />
+    <% dows = {"Sunday" => 0, "Monday" => 1, "Tuesday" => 2, "Wednesday" => 3, "Thursday" => 4, "Friday" => 5, "Saturday" => 6 } %>
+    <% dows.each do |k,v| %>
+    <%= check_box_tag("pickup_dows[]",v,@pickup_dows[v].nil? ? false : true) %>
+    <%= label_tag(k) %>
+    <% end %>
+
+  </div>
+<%= submit_tag %>
+<% end %>

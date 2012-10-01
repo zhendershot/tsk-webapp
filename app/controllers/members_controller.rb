@@ -1,5 +1,4 @@
 class MembersController < ApplicationController
-  before_filter :authenticate_member!
   before_filter :require_admin, :only => [:new, :create]
   before_filter :require_owner, :only => [:edit, :update]
 

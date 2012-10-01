@@ -16,7 +16,7 @@ class Stock < ActiveRecord::Base
   end
 
   def final_cost
-    self.cost + self.cost*(self.markup_pct/100.0) + self.markup_const
+    self.cost + self.cost*(self.markup_pct/100.0) + self.markup_const + self.cost*(Setting.first.global_markup_percent/100.0)
   end
 
   def available_items

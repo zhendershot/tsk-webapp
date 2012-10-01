@@ -1,5 +1,4 @@
 class StocksController < ApplicationController
-  before_filter :authenticate_user!
   before_filter :require_admin, :only => ["new","edit","update","destroy","create"]
 
   # GET /stocks

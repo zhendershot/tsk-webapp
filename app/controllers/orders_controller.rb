@@ -1,5 +1,4 @@
 class OrdersController < ApplicationController
-  before_filter :authenticate_member!
   before_filter :require_owner, :only => [:edit, :update, :destroy, :show]
   before_filter :require_admin, :only => [:toggle_taken, :toggle_paid]
 

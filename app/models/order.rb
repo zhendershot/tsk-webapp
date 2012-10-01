@@ -5,8 +5,6 @@ class Order < ActiveRecord::Base
   accepts_nested_attributes_for :order_details, :allow_destroy => true
   validates_presence_of :pickup_on
 
-  SalesTax = 3.41
-
   def pretax_cost
     sum = 0.0
     order_details.each { |od|
@@ -22,7 +20,7 @@ class Order < ActiveRecord::Base
   end
 
   def tax
-    (self.pretax_cost*(SalesTax/100.0)).round(2)
+    (self.pretax_cost*(Setting.first.sales_tax/100.0)).round(2)
   end
 
   def cost
@@ -30,6 +28,6 @@ class Order < ActiveRecord::Base
   end
 
   def paypal_cost
-    return self.cost + self.cost*0.029 + 0.30
+    return self.cost + self.cost*(Setting.first.paypal_fee_percent/100.0) + Setting.first.paypal_fee_per
   end
 end

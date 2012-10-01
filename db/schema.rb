@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121001150310) do
+ActiveRecord::Schema.define(:version => 20121001222112) do
 
   create_table "members", :force => true do |t|
     t.string   "name1"
@@ -88,6 +88,17 @@ ActiveRecord::Schema.define(:version => 20121001150310) do
     t.datetime "updated_at"
     t.integer  "observed_by"
     t.datetime "did_at"
+  end
+
+  create_table "settings", :force => true do |t|
+    t.decimal  "sales_tax"
+    t.decimal  "global_markup_percent"
+    t.decimal  "paypal_fee_percent"
+    t.decimal  "paypal_fee_per"
+    t.string   "pickup_dows"
+    t.decimal  "workshare_hours_per_month"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "stocks", :force => true do |t|

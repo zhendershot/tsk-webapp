@@ -1,4 +1,12 @@
 Secondkitchen::Application.routes.draw do
+
+  resources :settings do
+    collection do
+      get :edit
+      get :update
+    end
+  end
+
   devise_for :members
   resources :members
 
@@ -14,6 +22,7 @@ Secondkitchen::Application.routes.draw do
     end
     resources :order_details
   end
+
 
   resources :stocks
   resources :suppliers

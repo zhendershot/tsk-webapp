@@ -76,7 +76,6 @@ Note: If you destroy a stock item, all unarchived orders associated with that st
 </table>
 
 <br />
-Current <a href="http://www.bouldercolorado.gov/index.php?option=com_content&task=view&id=3164&Itemid=1499">sales tax rate</a>: <%= Order::SalesTax %>%<br>
 Total capital invested in stock: <%= sprintf('$%.02f',total_value) %><br>
 Total redeemable value if sold: <%= sprintf('$%.02f',total_final_value) %><br>
 Estimated Profit: <%= sprintf('$%.02f',total_final_value-total_value) %> with margin <%= sprintf('%.02f',100.0*(total_final_value-total_value)/total_final_value) %>%

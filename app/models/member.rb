@@ -45,16 +45,16 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def consective_months_under_service
+  def consecutive_months_under_service
     cur = Month.new(Time.now.year,Time.now.month)
-    cur = cur.prior
     first = Month.new(self.created_at.year,self.created_at.month)
     thresh = Setting.first.workshare_hours_per_month
     return 0 if thresh.nil?
-    n = 0
+    # start at -1 because we're considering the current month too
+    n = -1 
     while cur >= first
       sum = 0
-      Service.where("extract(year from did_at)=? AND extract(month from did_at)=?",cur.year,cur.month).collect{ |s| 
+      Service.where("member_id=? AND extract(year from did_at)=? AND extract(month from did_at)=?",self.id,cur.year,cur.month).collect{ |s| 
         sum += s.hours unless s.hours.nil? 
       }
       if sum < thresh

@@ -11,7 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121002011005) do
+ActiveRecord::Schema.define(:version => 20121002141345) do
+
+  create_table "fees", :force => true do |t|
+    t.string   "kind"
+    t.decimal  "amount"
+    t.date     "due"
+    t.integer  "member_id"
+    t.boolean  "paid"
+    t.boolean  "paypal"
+    t.integer  "marked_paid_by"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
+
+  add_index "fees", ["member_id"], :name => "index_fees_on_member_id"
 
   create_table "members", :force => true do |t|
     t.string   "name1"
@@ -37,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20121002011005) do
     t.string   "last_sign_in_ip"
     t.boolean  "disabled",               :default => false
     t.text     "disabled_reason"
+    t.string   "auto_disabled_type"
   end
 
   add_index "members", ["email"], :name => "index_members_on_email"
@@ -102,6 +117,9 @@ ActiveRecord::Schema.define(:version => 20121002011005) do
     t.datetime "updated_at",                                   :null => false
     t.integer  "num_months_under_disable",  :default => 3
     t.decimal  "annual_fee",                :default => 100.0
+    t.decimal  "startup_fee",               :default => 100.0
+    t.decimal  "startup_fee_slack_days",    :default => 7.0
+    t.decimal  "annual_fee_slack_days",     :default => 30.0
   end
 
   create_table "stocks", :force => true do |t|

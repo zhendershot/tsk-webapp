@@ -9,7 +9,7 @@
     <th>Member Since</th>
     <% if current_member.admin %>
     <th>Orders</th>
-    <th>Service Hours since <%= Member::ServiceStartDate.strftime('%m/%d/%Y') %></th>
+    <th>Service</th>
     <th></th>
     <% end %>
   </tr>
@@ -33,7 +33,8 @@
     <td><%= member.created_at.strftime('%Y-%m-%d') %> (<%= member.days_as_member %> days)</td>
     <% if current_member.admin %>
     <td><%= member.orders.length %>
-    <td style="background: <%= member.service_balance > 0 ? "yellow" : "white" %>;"><%= sprintf('%.01f',member.service_total) %> <% if member.service_balance > 0 %>(short <%= sprintf('%.01f',member.service_balance) %> hours)<% end %>
+    <td><% n = member.consecutive_months_under_service %>
+        <%= n <= 0 ? "Ok" : "#{n} months under-service" %>
     <td><%= link_to image_tag("/images/view_button.s.png",:border=>0), member %><br>
         <%= link_to image_tag("/images/edit_button.s.png",:border=>0), edit_member_path(member) %><br>
         <%= link_to image_tag("/images/nix_button.s.png",:border=>0), member, :confirm => 'Are you sure?', :method => :delete %><br>

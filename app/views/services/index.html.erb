@@ -12,7 +12,7 @@
 
 <% @services.each do |service| %>
   <tr>
-    <td><%= service.did_at.nil? ? service.created_at.strftime('%Y-%m-%d') : service.did_at.strftime('%Y-%m-%d') %></td>
+    <td><%= service.did_at.strftime('%Y-%m-%d') %></td>
     <td><%= service.member.name %></td>
     <td><%= service.hours %></td>
     <td><%= service.task %></td>

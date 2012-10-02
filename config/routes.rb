@@ -1,5 +1,14 @@
 Secondkitchen::Application.routes.draw do
 
+  resources :fees do
+    collection do
+      get :mine
+    end
+    member do
+      get :toggle_paid
+    end
+  end
+
   resources :settings do
     collection do
       get :edit

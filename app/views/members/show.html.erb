@@ -28,8 +28,6 @@ Reason: <%= @member.disabled_reason %>
   <%= @member.phone %>
 </p>
 
-<%= @member.consective_months_under_service %>
-
 <% 
 product_stats = {}
 product_sort = {}
@@ -70,9 +68,6 @@ You haven't ordered anything. That's awfully boring...
 <% end %>
 <br><br>
 You have worked <%= sprintf("%.02f",@member.service_total) %> hours for the co-op since <%= Member::ServiceStartDate.strftime('%m/%d/%Y') %>, which works out to <%= sprintf("%.02f",@member.service_per_month) %> hours per month. 
-<% if @member.service_balance > 0 %>
-<b><br>Hence, you owe the co-op <%= @member.service_balance %> hours.</b>
-<% end %>
 <br><br>
 <%= link_to image_tag("/images/back_button.s.png",:border=>0), members_path %>
 <% if current_member.admin or @member.id == current_member.id %>

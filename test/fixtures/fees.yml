@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  description: MyText
+  amount: 9.99
+  due: 2012-10-02
+  member: 
+  paid: false
+  paypal: false
+  marked_paid_by: 1
+
+two:
+  description: MyText
+  amount: 9.99
+  due: 2012-10-02
+  member: 
+  paid: false
+  paypal: false
+  marked_paid_by: 1

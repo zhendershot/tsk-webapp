@@ -21,7 +21,7 @@
   <tr><th>Check or<th>Hours<th>Name<th>Task</tr>
   <%
   # precompute quantities to speed things up a bit
-  Member.scoped_by_disabled(false).all(:order => :name1).each{ |member|
+  Member.all(:order => :name1).each{ |member|
   %>
     <tr>
     <td><input type="checkbox" name="service[done][<%= member.id %>]" id="service_done_<%= member.id %>" value="1" \>

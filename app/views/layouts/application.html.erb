@@ -46,6 +46,12 @@
        <li><%= link_to "Add Observed Work", :controller => "services", :action => "new" %>
      </ul>
     <% end %>
+    <li><%= link_to "Manage Fees", fees_path %>
+    <% if params[:controller] == "fees" %>
+     <ul>
+      <li><%= link_to 'New Fee', new_fee_path %>
+     </ul>
+    <% end %>
     <li><%= link_to "Site Configuration", edit_settings_path %>
   <% else %>
   <li><%= link_to "My Orders", orders_path %>

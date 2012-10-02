@@ -35,8 +35,9 @@ class ServicesController < ApplicationController
     params[:service][:hours].each{ |member_id,amt|
       next if amt.nil? or (amt.kind_of? String and amt.strip == "")
       task = params[:service][:task][member_id]
+      did_at = Date.new(params[:service]["did_at(1i)"].to_i,params[:service]["did_at(2i)"].to_i,params[:service]["did_at(3i)"].to_i)
       service = Service.new({:member_id => member_id, :hours => amt, :task => task, 
-                             :observed_by => current_member, :did_at => params[:service][:did_at]})
+                             :observed_by => current_member, :did_at => did_at})
       unless service.save
         failed = true
         break

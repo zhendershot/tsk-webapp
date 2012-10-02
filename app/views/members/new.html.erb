@@ -1,8 +1,0 @@
-<h1>Create a Member</h1>
-
-<% form_for @member, :url => account_path do |f| %>
-  <%= f.error_messages %>
-  <%= render :partial => "form", :object => f %>
-<% end %>
-
-<%= link_to image_tag("/images/back_button.s.png",:border=>0), members_path %>

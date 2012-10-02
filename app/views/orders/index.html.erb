@@ -39,7 +39,7 @@ Past orders are used to estimate demand and generate reports, so please don't de
     </div>
     </td>
     <td><%= sprintf('$%.02f',order.cost) %></td>
-    <td><%= order.notes %></td>
+    <td><%= word_wrap(order.notes,20).gsub("\n","<br>").html_safe %></td>
     <td><%= link_to image_tag("/images/view_button.s.png",:border=>0), order %><br>
         <%= link_to image_tag("/images/edit_button.s.png",:border=>0), edit_order_path(order) %><br>
         <%= link_to image_tag("/images/nix_button.s.png",:border=>0), order, :confirm => 'Are you sure?', :method => :delete %><br>

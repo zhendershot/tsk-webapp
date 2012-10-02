@@ -41,36 +41,9 @@ class MembersController < ApplicationController
     end
   end
 
-  # GET /members/new
-  # GET /members/new.xml
-  def new
-    @member = Member.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @member }
-    end
-  end
-
   # GET /members/1/edit
   def edit
     @member = Member.find(params[:id])
-  end
-
-  # POST /members
-  # POST /members.xml
-  def create
-    @member = Member.new(params[:member])
-
-    respond_to do |format|
-      if @member.save
-        format.html { redirect_to(@member, :notice => 'Member was successfully created.') }
-        format.xml  { render :xml => @member, :status => :created, :location => @member }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @member.errors, :status => :unprocessable_entity }
-      end
-    end
   end
 
   # PUT /members/1

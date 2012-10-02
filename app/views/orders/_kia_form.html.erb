@@ -35,8 +35,7 @@
 
   <div class="field">
     <%= f.label :will_pickup_on %><br />
-    <% CalendarDateSelect.format=(:iso_date)%>
-    <%= f.calendar_date_select :pickup_on, :valid_date_check => "date.getDay() == 0 || date.getDay() == 3", :time => false %>
+    <%= f.text_field :pickup_on, :class => 'datepicker' %>
   </div>
 
   <h2>Order Items</h2>
@@ -89,3 +88,15 @@
     <%= image_submit_tag("/images/save_button.s.png") %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+$( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd', beforeShowDay: someDaysOnly });
+function someDaysOnly(date){
+  var okaydays = [<%= Setting.first.pickup_dows.split(/:/).join(",") %>];
+  for(var i = 0; i < okaydays.length; i++){
+    if(date.getDay() == okaydays[i]) return [true,''];
+  }
+  return [false,''];
+}
+</script>
+

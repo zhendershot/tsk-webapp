@@ -19,7 +19,7 @@
  @members.each do |member| 
   row_bgcolor = nil
   if member.disabled
-    row_bgcolor = "grey"
+    row_bgcolor = "lightgrey"
   elsif member.admin
     row_bgcolor = "lightblue"
   end
@@ -27,7 +27,7 @@
   <tr <%= "style=\"background: #{row_bgcolor};\"".html_safe unless row_bgcolor.nil? %>>
     <th><%= i %>
     <td><%= member.name %></td>
-    <td><%= member.email %> <%= member.extra_emails %></td>
+    <td><%= member.email %><br><%= member.extra_emails.split(/[,\s]+/).join("<br>").html_safe unless member.extra_emails.nil? %></td>
     <td><%= member.phone %></td>
 
     <td><%= member.created_at.strftime('%Y-%m-%d') %> (<%= member.days_as_member %> days)</td>
@@ -45,5 +45,5 @@ i += 1
 end %>
 </table>
 <br><br>
-Key: <span style="background: grey;">Account Disabled</span>
+Key: <span style="background: lightgrey;">Account Disabled</span>
 <span style="background: lightblue;">Admin</span>

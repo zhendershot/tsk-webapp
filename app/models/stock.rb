@@ -3,6 +3,7 @@ class Stock < ActiveRecord::Base
   belongs_to :product
   belongs_to :supplier
   validates_presence_of :name, :cost, :quantity
+  attr_accessible :name, :quantity, :cost, :markup_pct, :markup_const, :origin, :supplier_id, :product_id, :limited
 
   def grams(x=self.quantity,p=self.product)
     if p.unit_type == "weight"

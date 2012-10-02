@@ -6,9 +6,20 @@
   <div><%= f.label :name %><br />
   <%= f.text_field :name1 %></div>
 
+  <div><%= f.label :name_2 %> (optional)<br />
+  <%= f.text_field :name2 %></div>
 
-  <div><%= f.label :email %><br />
+  <div><%= f.label :name_3 %> (optional)<br />
+  <%= f.text_field :name3 %></div>
+
+  <div><%= f.label :main_email %> (used to login)<br />
   <%= f.email_field :email %></div>
+
+  <div><%= f.label :other_emails %><br />
+  <%= f.text_area :extra_emails, :size => "20x3" %></div>
+
+  <div><%= f.label :phone %> (used to login)<br />
+  <%= f.text_field :phone %></div>
 
   <div><%= f.label :password %><br />
   <%= f.password_field :password %></div>

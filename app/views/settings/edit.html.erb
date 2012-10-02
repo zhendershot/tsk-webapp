@@ -1,7 +1,7 @@
 <h1>Settings</h1>
 <%= form_for(@settings) do |f| %>
   <div class="field">
-    <%= f.label :sales_tax %><br />
+    <%= f.label :sales_tax_percent %><br />
     <%= f.text_field :sales_tax %>
   </div>
   <div class="field">
@@ -20,8 +20,26 @@
     <%= f.label :required_workshare_hours_per_month %><br />
     <%= f.text_field :workshare_hours_per_month %>
   </div>
-
-
+  <div class="field">
+    <%= f.label :disable_when_this_many_months_under_on_workshare %><br />
+    <%= f.text_field :num_months_under_disable %>
+  </div>
+  <div class="field">
+    <%= f.label :annual_fee %><br />
+    <%= f.text_field :annual_fee %>
+  </div>
+  <div class="field">
+    <%= f.label :start_up_fee %><br />
+    <%= f.text_field :startup_fee %>
+  </div>
+  <div class="field">
+    <%= f.label :startup_fee_days_after_due_until_disabled %><br />
+    <%= f.text_field :startup_fee_slack_days %>
+  </div>
+  <div class="field">
+    <%= f.label :annual_fee_days_after_due_until_disabled %><br />
+    <%= f.text_field :annual_fee_slack_days %>
+  </div>
   <div class="field">
     <%= f.label :allow_pickups_on %><br />
     <% dows = {"Sunday" => 0, "Monday" => 1, "Tuesday" => 2, "Wednesday" => 3, "Thursday" => 4, "Friday" => 5, "Saturday" => 6 } %>

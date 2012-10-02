@@ -1,12 +1,12 @@
-<h1><%= @member.id == current_member.id ? 'Your Member Info' : "Member " + @member.id.to_s %></h1>
-
 <% if @member.disabled %>
 <div style="background: maroon; border: 1px solid red; color: white; padding: 1em;">
 Account is disabled. You will not be able to place an order until your account is re-enabled.
 <br><br>
 Reason: <%= @member.disabled_reason %>
-</div>
+</div><br>
 <% end %>
+
+<h1><%= @member.id == current_member.id ? 'Welcome!' : "Member " + @member.id.to_s %></h1>
 
 <p>
   <b>Name(s):</b>
@@ -27,7 +27,7 @@ Reason: <%= @member.disabled_reason %>
   <b>Phone Number:</b>
   <%= @member.phone %>
 </p>
-
+<br><br>
 <% 
 product_stats = {}
 product_sort = {}

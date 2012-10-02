@@ -2,36 +2,30 @@
 <html>
 <head>
   <title>The Second Kitchen</title>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.5.1/build/cssreset/cssreset-min.css">
+  <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
   <%= stylesheet_link_tag :application %>
   <%= javascript_include_tag :application %>
-  <%= calendar_date_select_includes %>
   <%= csrf_meta_tag %>
 </head>
 <body>
 
-<div style="float: left; padding: 1em; border: 1px solid black; width: 15em;">
-<ul style="list-style-type:none; padding-left: 0em;">
+<div class="container">
+<div class="navigation">
+<div id="cssmenu"><ul>
 <% if !current_member %>
 <% else %>
   <li><%= link_to "Home", :controller => "members", :action => "show", :id => current_member %>
   <% if current_member.admin %>
-    <li><%= link_to "Orders List", orders_path %>
-    <% if params[:controller] == "orders" %>
+    <li><%= link_to "Orders", orders_path %>
      <ul>
        <li><%= link_to "Show All", :controller => "orders", :all => 1 %>
        <li><%= link_to "Distribution", :controller => "orders", :action => "distribution" %>
        <li><%= link_to "Markup Report", :controller => "orders", :action => "markup" %>
        <li><%= link_to "New Order", :controller => "orders", :action => "new" %>
      </ul>
-    <% end %>
-    <li><%= link_to "Members List", members_path %>
-    <% if params[:controller] == "members" %>
-     <ul>
-       <li><%= link_to "New Member", :controller => "members", :action => "new" %>
-     </ul>
-    <% end %>
-    <li><%= link_to "Manage Stock", stocks_path %>
-    <% if params[:controller] == "stocks" or params[:controller] == "products" or params[:controller] == "suppliers"%>
+    <li><%= link_to "Members", members_path %>
+    <li><%= link_to "Stock", stocks_path %>
      <ul>
        <li><%= link_to "New Stock Item", :controller => "stocks", :action => "new" %>
        <li><%= link_to "New Product", :controller => "products", :action => "new" %>
@@ -39,23 +33,17 @@
        <li><%= link_to "List Suppliers", suppliers_path %>
        <li><%= link_to "List Products", products_path %>
      </ul>
-    <% end %>
-    <li><%= link_to "Manage Workshare", services_path %>
-    <% if params[:controller] == "services" %>
+    <li><%= link_to "Workshare", services_path %>
      <ul>
        <li><%= link_to "Add Observed Work", :controller => "services", :action => "new" %>
      </ul>
-    <% end %>
-    <li><%= link_to "Manage Fees", fees_path %>
-    <% if params[:controller] == "fees" %>
+    <li><%= link_to "Fees", fees_path %>
      <ul>
       <li><%= link_to 'New Fee', new_fee_path %>
      </ul>
-    <% end %>
-    <li><%= link_to "Site Configuration", edit_settings_path %>
+    <li><%= link_to "Settings", edit_settings_path %>
   <% else %>
   <li><%= link_to "My Orders", orders_path %>
-  <% if params[:controller] == "orders" or params[:controller] == "stocks" %>
    <ul>
      <li><%= link_to "Past Orders", :controller => "orders", :all => 1 %>
      <li><%= link_to "Distribution", :controller => "orders", :action => "distribution" %>
@@ -64,31 +52,35 @@
      <li><%= link_to "New Order", :controller => "orders", :action => "new" %>
      <% end %>
    </ul>
-  <% end %>
   <li><%= link_to "Members List", members_path %>
   <% end %>
-  <li><%= link_to "Logout", destroy_member_session_path, :method => :delete %>
+  <li><%= link_to "Logout", "/members/sign_out" %>
 <% end %>
 </ul>
 </div>
-
-<% if current_member %>
-<div style="color: grey; font-size: 9pt; clear:both; text-align: center; float: left; width: 15em; padding: 1em;">
-  Logged in as: <%= current_member.name %> (<%= current_member.email %>).
-  <% if current_member.admin? %>
-    Lookout! You have superpowers!
-  <% end %>
 </div>
-<% end %>
 
-<div style="margin-left: 20em;">
-<% if notice %>
-<div class="notice"><%= notice %></div>
-<% end %>
-<% if alert %>
-<div class="alert"><%= alert %></div>
-<% end %>
-<%= yield %>
+  <div class="header">
+    <div>
+      <h2 id="title">The Second Kitchen</h2>
+    </div>
+    <%= link_to root_path do image_tag("/images/logo.png",:class => "logo_image") end %>
+  </div>
+
+  <div class="wrap">
+    <% if notice %>
+     <div class="notice"><%= notice %></div>
+    <% end %>
+    <% if alert %>
+     <div class="alert"><%= alert %></div>
+    <% end %>
+    <%= yield %>
+  </div>
+
+  <div class="footer">
+    <p>Copyright © <a href="http://www.thesecondkitchen.org">The Second Kitchen</a> <%= Time.now.year %></p>
+  </div>
+
 </div>
 
 </body>

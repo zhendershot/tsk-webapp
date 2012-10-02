@@ -1,16 +1,17 @@
 source 'http://rubygems.org'
 
 gem 'rails'
-gem 'jquery-rails'
+
+group :assets do
+  gem 'jquery-ui-rails'
+  gem 'jquery-rails'
+end 
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
 gem 'dispatcher'
-
-gem 'calendar_date_select', :git => 'http://github.com/paneq/calendar_date_select.git', :branch => 'rails3test'
-
 gem 'thin'
 
 gem 'active_scaffold'

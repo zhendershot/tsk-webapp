@@ -35,19 +35,16 @@
     <%= f.label :phone %><br />
     <%= f.text_field :phone %>
   </div>
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password %>
-  </div>
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation %>
-  </div>
   <% if current_member.admin %>
     <div class="field">
-      <%= f.label :active %><br />
-      <%= f.check_box :active %>
+      <%= f.label :disabled %><br />
+      <%= f.check_box :disabled %>
     </div>
+    <div class="field">
+      <%= f.label :disabled_reason %><br />
+      <%= f.text_area :disabled_reason, :size => "30x3" %>
+    </div>
+    
     <div class="field">
       <%= f.label :admin %><br />
       <%= f.check_box :admin %>

@@ -11,14 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121001222112) do
+ActiveRecord::Schema.define(:version => 20121002011005) do
 
   create_table "members", :force => true do |t|
     t.string   "name1"
     t.string   "name2"
     t.string   "name3"
     t.string   "email",                                     :null => false
-    t.boolean  "active",                 :default => true,  :null => false
     t.boolean  "admin",                  :default => false, :null => false
     t.string   "password_salt",                             :null => false
     t.string   "persistence_token",                         :null => false
@@ -36,6 +35,8 @@ ActiveRecord::Schema.define(:version => 20121001222112) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.boolean  "disabled",               :default => false
+    t.text     "disabled_reason"
   end
 
   add_index "members", ["email"], :name => "index_members_on_email"
@@ -97,8 +98,10 @@ ActiveRecord::Schema.define(:version => 20121001222112) do
     t.decimal  "paypal_fee_per"
     t.string   "pickup_dows"
     t.decimal  "workshare_hours_per_month"
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",                                   :null => false
+    t.datetime "updated_at",                                   :null => false
+    t.integer  "num_months_under_disable",  :default => 3
+    t.decimal  "annual_fee",                :default => 100.0
   end
 
   create_table "stocks", :force => true do |t|

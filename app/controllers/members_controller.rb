@@ -21,6 +21,10 @@ class MembersController < ApplicationController
     end
   end
 
+  def home
+    show
+  end
+
   # GET /members/1
   # GET /members/1.xml
   def show
@@ -31,7 +35,7 @@ class MembersController < ApplicationController
       redirect_to account_path
     else
       respond_to do |format|
-        format.html # show.html.erb
+        format.html { render :show } # show.html.erb
         format.xml  { render :xml => @member }
       end
     end

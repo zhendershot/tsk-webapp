@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>The Second Kitchen</title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
+  <%= stylesheet_link_tag :application %>
+  <%= javascript_include_tag :application %>
   <%= calendar_date_select_includes %>
   <%= csrf_meta_tag %>
 </head>
@@ -54,8 +54,9 @@
      <li><%= link_to "Past Orders", :controller => "orders", :all => 1 %>
      <li><%= link_to "Distribution", :controller => "orders", :action => "distribution" %>
      <li><%= link_to "View Stock", stocks_path %>
+     <% unless current_member.disabled %>
      <li><%= link_to "New Order", :controller => "orders", :action => "new" %>
-
+     <% end %>
    </ul>
   <% end %>
   <li><%= link_to "Members List", members_path %>

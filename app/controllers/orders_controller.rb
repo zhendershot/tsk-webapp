@@ -105,6 +105,11 @@ class OrdersController < ApplicationController
   # GET /orders/new
   # GET /orders/new.xml
   def new
+    if current_member.disabled
+      flash[:notice] = "Account is disabled. Cannot order until re-enabled."
+      redirect_to(root_path)
+      return
+    end
     @order = Order.new
     respond_to do |format|
       format.html # new.html.erb
@@ -125,6 +130,11 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.xml
   def create
+    if current_member.disabled
+      flash[:notice] = "Account is disabled. Cannot order until re-enabled."
+      redirect_to(root_path)
+      return
+    end
     params[:order][:order_details_attributes].each{ |k,v|
       params[:order][:order_details_attributes].delete(k) if v[:quantity].to_f == 0.0 or v[:quantity].strip == ''
     }

@@ -10,16 +10,21 @@
     <% if current_member.admin %>
     <th>Orders</th>
     <th>Service Hours since <%= Member::ServiceStartDate.strftime('%m/%d/%Y') %></th>
-    <th>Admin</th>
-    <th>Active</th>
     <th></th>
     <% end %>
   </tr>
 
 <%
  i = 1
- @members.each do |member| %>
-  <tr>
+ @members.each do |member| 
+  row_bgcolor = nil
+  if member.disabled
+    row_bgcolor = "grey"
+  elsif member.admin
+    row_bgcolor = "lightblue"
+  end
+ %>
+  <tr <%= "style=\"background: #{row_bgcolor};\"".html_safe unless row_bgcolor.nil? %>>
     <th><%= i %>
     <td><%= member.name %></td>
     <td><%= member.email %> <%= member.extra_emails %></td>
@@ -29,8 +34,6 @@
     <% if current_member.admin %>
     <td><%= member.orders.length %>
     <td style="background: <%= member.service_balance > 0 ? "yellow" : "white" %>;"><%= sprintf('%.01f',member.service_total) %> <% if member.service_balance > 0 %>(short <%= sprintf('%.01f',member.service_balance) %> hours)<% end %>
-    <td><% if member.admin %><div style="text-align: center;"><img src="/images/check_on.s.png"></div><% end %></td>
-    <td><% if member.active %><div style="text-align: center;"><img src="/images/check_on.s.png"></div><% end %></td>
     <td><%= link_to image_tag("/images/view_button.s.png",:border=>0), member %><br>
         <%= link_to image_tag("/images/edit_button.s.png",:border=>0), edit_member_path(member) %><br>
         <%= link_to image_tag("/images/nix_button.s.png",:border=>0), member, :confirm => 'Are you sure?', :method => :delete %><br>
@@ -40,3 +43,6 @@
 i += 1
 end %>
 </table>
+<br><br>
+Key: <span style="background: grey;">Account Disabled</span>
+<span style="background: lightblue;">Admin</span>

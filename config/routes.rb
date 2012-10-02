@@ -8,7 +8,11 @@ Secondkitchen::Application.routes.draw do
   end
 
   devise_for :members
-  resources :members
+  resources :members do
+    collection do
+      get :home
+    end
+  end
 
   resources :orders do
     collection do
@@ -29,7 +33,7 @@ Secondkitchen::Application.routes.draw do
   resources :products
   resources :services
 
-  root :controller => "members", :action => "index"
+  root :controller => "members", :action => "home"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

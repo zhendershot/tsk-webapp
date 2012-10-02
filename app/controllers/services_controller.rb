@@ -4,7 +4,7 @@ class ServicesController < ApplicationController
   # GET /services
   # GET /services.xml
   def index
-    @services = Service.all
+    @services = Service.all(:order => "did_at DESC")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -27,8 +27,13 @@ class ServicesController < ApplicationController
   # POST /services.xml
   def create
     failed = false
+    params[:service][:done].each{ |member_id,one|
+      unless one.to_i != 1
+        params[:service][:hours][member_id] = Setting.first.workshare_hours_per_month
+      end
+    }
     params[:service][:hours].each{ |member_id,amt|
-      next if amt.nil? or amt.strip == ""
+      next if amt.nil? or (amt.kind_of? String and amt.strip == "")
       task = params[:service][:task][member_id]
       service = Service.new({:member_id => member_id, :hours => amt, :task => task, 
                              :observed_by => current_member, :did_at => params[:service][:did_at]})

@@ -4,6 +4,7 @@ class Order < ActiveRecord::Base
   has_many :order_details, :dependent => :destroy
   accepts_nested_attributes_for :order_details, :allow_destroy => true
   validates_presence_of :pickup_on
+  attr_accessible :member_id, :paid, :taken, :paid_with_paypal, :pickup_on, :order_details_attributes, :notes
 
   def pretax_cost
     sum = 0.0

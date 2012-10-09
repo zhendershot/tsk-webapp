@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121002155939) do
+ActiveRecord::Schema.define(:version => 20121009215106) do
 
   create_table "fees", :force => true do |t|
     t.string   "kind"
@@ -117,6 +117,16 @@ ActiveRecord::Schema.define(:version => 20121002155939) do
     t.decimal  "startup_fee_slack_days",    :default => 7.0
     t.decimal  "annual_fee_slack_days",     :default => 30.0
   end
+
+  create_table "stock_votes", :force => true do |t|
+    t.integer  "member_id"
+    t.integer  "stock_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "stock_votes", ["member_id"], :name => "index_stock_votes_on_member_id"
+  add_index "stock_votes", ["stock_id"], :name => "index_stock_votes_on_stock_id"
 
   create_table "stocks", :force => true do |t|
     t.string   "name"

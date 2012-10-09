@@ -1,0 +1,28 @@
+<h1>Vote for Stock Items You Want</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Quantity</th>
+    <th>Units</th>
+    <th>Origin</th>
+    <th>Supplier</th>
+    <th>Product</th>
+    <th>Votes</th>
+  </tr>
+
+<% 
+   @stock.each do |stock|
+  %>
+  <tr>
+    <td><%= stock.name %></td>
+    <td style="background: <%= stock.quantity <= 0 ? 'orange' : 'white' %>;">
+      <%= stock.quantity %></td>
+    <td><%= stock.product.nil? ? "?" : stock.product.units %></td>
+    <td><%= stock.origin %></td>
+    <td><%= stock.supplier.nil? ? "?" : stock.supplier.name %></td>
+    <td><%= stock.product.nil? ? "?" : stock.product.name %></td>
+    <td><%= @votes[stock.id].nil? ? 0 : @votes[stock.id] %> votes, <%= sprintf('%.01f',100.0*@votes[stock.id].to_f/@mcount) %>% of membership
+  </tr>
+<% end %>
+</table>

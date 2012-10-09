@@ -32,6 +32,8 @@
        <li><%= link_to "New Supplier", :controller => "suppliers", :action => "new" %>
        <li><%= link_to "List Suppliers", suppliers_path %>
        <li><%= link_to "List Products", products_path %>
+       <li><%= link_to "Your Wishlist", stock_votes_path %>
+       <li><%= link_to "Wishlist Summary", summary_stock_votes_path %>
      </ul>
     <li><%= link_to "Workshare", services_path %>
      <ul>
@@ -48,6 +50,7 @@
      <li><%= link_to "Past Orders", :controller => "orders", :all => 1 %>
      <li><%= link_to "Distribution", :controller => "orders", :action => "distribution" %>
      <li><%= link_to "View Stock", stocks_path %>
+     <li><%= link_to "Wishlist", stock_votes_path %>
      <% unless current_member.disabled %>
      <li><%= link_to "New Order", :controller => "orders", :action => "new" %>
      <% end %>

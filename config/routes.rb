@@ -1,5 +1,14 @@
 Secondkitchen::Application.routes.draw do
 
+  resources :stock_votes do
+    collection do
+      get :summary
+    end
+    member do
+      get :toggle
+    end
+  end
+
   resources :fees do
     collection do
       get :mine

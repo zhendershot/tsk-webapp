@@ -1,0 +1,35 @@
+<h1>Vote for Stock Items You Want</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Quantity</th>
+    <th>Units</th>
+    <th>Origin</th>
+    <th>Supplier</th>
+    <th>Product</th>
+    <th></th>
+  </tr>
+
+<% 
+   last_category = nil
+   @stock.each do |stock|
+     cat = stock.product.nil? ? "Unknown" : stock.product.category
+  %>
+  <% if cat != last_category 
+       last_category = cat
+  %>
+  <tr><th colspan=18 style="background: lightblue; color: black;"><%= cat.capitalize %></th></tr>
+  <% end %>
+  <tr>
+    <td><%= stock.name %></td>
+    <td style="background: <%= stock.quantity <= 0 ? 'orange' : 'white' %>;">
+      <%= stock.quantity %></td>
+    <td><%= stock.product.nil? ? "?" : stock.product.units %></td>
+    <td><%= stock.origin %></td>
+    <td><%= stock.supplier.nil? ? "?" : stock.supplier.name %></td>
+    <td><%= stock.product.nil? ? "?" : stock.product.name %></td>
+    <td><a href="/stock_votes/<%= stock.id %>/toggle"><%= image_tag("/images/check_" + (@votes[stock.id].nil? ? "off" : "on") + ".s.png",:border=>0) %></a>
+  </tr>
+<% end %>
+</table>

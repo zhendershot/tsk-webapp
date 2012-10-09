@@ -130,6 +130,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.xml
   def create
+    notice = ""
     if current_member.disabled
       flash[:notice] = "Account is disabled. Cannot order until re-enabled."
       redirect_to(root_path)
@@ -164,12 +165,18 @@ class OrdersController < ApplicationController
     # first check to make sure there is enough stock available
     @order.order_details.each{ |od|
       if od.stock.limited and od.stock.quantity < od.quantity
-        @order.errors.add "Limited Stock Item:","Sorry, there are only #{od.stock.quantity} #{od.stock.product.units} #{od.stock.name} remaining"
-        respond_to do |format|
-          format.html { render :action => "new" }
-          format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
+        unless current_member.admin
+          @order.errors.add "Limited Stock Item:","Sorry, there are only #{od.stock.quantity} #{od.stock.product.units} #{od.stock.name} remaining"
+          respond_to do |format|
+            format.html { render :action => "new" }
+            format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
+          end
+          return false
+        else
+          notice = "Limited Stock Item: There were only #{od.stock.quantity} 
+                               #{od.stock.product.units} #{od.stock.name} remaining, 
+                               but I let you do it anyway since you're the boss!"
         end
-        return false
       end
     }
 
@@ -180,7 +187,7 @@ class OrdersController < ApplicationController
           od.stock.quantity -= od.quantity
           od.stock.save
         }
-        format.html { redirect_to(orders_path, :notice => 'Order was successfully created.') }
+        format.html { redirect_to(orders_path, :notice => "Order was successfully created. #{notice}") }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
       else
         format.html { render :action => "new" }
@@ -292,12 +299,18 @@ class OrdersController < ApplicationController
       old_stock_quantities[sid] = 0.0 if old_stock_quantities[sid].nil?
       qmax = s.quantity + old_stock_quantities[sid]
       if s.limited and qmax < stock_quantities[sid]
-        @order.errors.add "Limited Stock Item:","Sorry, there are only #{qmax} #{s.product.units} #{s.name} remaining and you have tried to order #{stock_quantities[sid]}."
-        respond_to do |format|
-          format.html { render :action => "new" }
-          format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
+        unless current_member.admin
+          @order.errors.add "Limited Stock Item:","Sorry, there are only #{qmax} #{s.product.units} #{s.name} remaining and you have tried to order #{stock_quantities[sid]}."
+          respond_to do |format|
+            format.html { render :action => "new" }
+            format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
+          end
+          return false
+        else
+          notice = "Limited Stock Item: There were only #{qmax} 
+                               #{s.product.units} #{s.name} remaining, 
+                               but I let you do it anyway since you're the boss!"
         end
-        return false
       end
     }
 

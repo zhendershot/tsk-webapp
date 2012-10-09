@@ -38,7 +38,7 @@ Order.find_all_by_member_id(@member.id).each do |o|
   week_stats[w][:n] += 1
   week_stats[w][:cost] += o.cost
   o.order_details.each{ |od|
-    next if od.stock.nil?
+    next if od.stock.nil? or (o.archived and od.archived_product.nil?)
     pid = o.archived ? od.archived_product.id : od.stock.product.id
     product_stats[pid] = 0.0 if product_stats[pid].nil?
     product_stats[pid] += od.quantity

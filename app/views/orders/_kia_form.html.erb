@@ -51,7 +51,9 @@
   <tr><th>Quantity<th>Name<th>Cost/Unit<th>Stock<th>Origin/Supplier</tr>
   <% n = 0 
      last_category = nil %>
-  <% Stock.where("(limited = 'f') OR (limited = 't' AND quantity > 0.0)",:order => "product_id,name").sort{ |x,y|
+  <% whut = "(limited = 'f') OR (limited = 't' AND quantity > 0.0)"
+     whut = "1 = 1" if current_member.admin
+     Stock.where(whut,:order => "product_id,name").sort{ |x,y|
       a = x.product.nil? ? "Unknown" : x.product.category
       b = y.product.nil? ? "Unknown" : y.product.category
       a <=> b

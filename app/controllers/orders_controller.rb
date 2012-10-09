@@ -34,6 +34,16 @@ class OrdersController < ApplicationController
     end
   end
 
+  def fill
+    params[:partial_fill].each{ |odid,pf|
+      od = OrderDetail.find(odid.to_i)
+      od.partial_fill = pf.to_f
+      od.save
+    }
+    distribution
+  end
+
+
   def distribution
     @orders = Order.scoped_by_taken(false).scoped_by_paid(true)
     @by_stock = {}
@@ -45,10 +55,7 @@ class OrdersController < ApplicationController
         @by_stock[o.pickup_on][od.stock.id].push(od)
       }
     }
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @orders }
-    end
+    render :distribution
   end
 
   def markup(by="week")
@@ -177,6 +184,8 @@ class OrdersController < ApplicationController
                                #{od.stock.product.units} #{od.stock.name} remaining, 
                                but I let you do it anyway since you're the boss!"
         end
+      elsif od.stock.quantity < od.quantity and !od.stock.limited
+        notice = "You have ordered more than is currently in stock. There may be some delay in filling this order-item."
       end
     }
 
@@ -311,6 +320,8 @@ class OrdersController < ApplicationController
                                #{s.product.units} #{s.name} remaining, 
                                but I let you do it anyway since you're the boss!"
         end
+      elsif !s.limited and qmax < stock_quantities[sid]
+        notice = "You ordered more #{s.name} than is currently in stock. It may be some delay before this order item is available for pick up."
       end
     }
 

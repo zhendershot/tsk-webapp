@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121009215106) do
+ActiveRecord::Schema.define(:version => 20121009224651) do
 
   create_table "fees", :force => true do |t|
     t.string   "kind"
@@ -65,6 +65,7 @@ ActiveRecord::Schema.define(:version => 20121009215106) do
     t.decimal  "archived_cost",         :precision => 10, :scale => 2
     t.decimal  "archived_markup_pct",   :precision => 10, :scale => 2
     t.decimal  "archived_markup_const", :precision => 10, :scale => 2
+    t.decimal  "partial_fill"
   end
 
   create_table "orders", :force => true do |t|

@@ -37,6 +37,7 @@ Secondkitchen::Application.routes.draw do
       get 'all'
       get :distribution
       get :markup
+      post :fill
     end
     member do 
       get :toggle_taken

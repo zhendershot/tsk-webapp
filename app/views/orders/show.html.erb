@@ -45,7 +45,7 @@
 
 <h2>Order Details</h2>
 <table>
-<tr><th>Quantity<th>Item<th>Units<th>Weight (g)<th>Cost<th>Extension</tr>
+<tr><th>Quantity<th>Item<th>Units<th>Weight (g)<th>Cost<th>Extension<th>Filled</tr>
 <% 
   pretax = 0.0
   @order.order_details.each do |item| %>
@@ -70,6 +70,7 @@
   <td><%= sprintf('$%.02f',item.archived_cost) %>
   <td><%= sprintf('$%.02f',item.archived_cost*item.quantity) %>
 <% end %>
+<td><%= item.partial_fill %>
 </tr>
 <% end %>
 </table>

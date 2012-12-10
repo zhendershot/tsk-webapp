@@ -29,6 +29,7 @@ Secondkitchen::Application.routes.draw do
   resources :members do
     collection do
       get :home
+      get :switch_user
     end
   end
 

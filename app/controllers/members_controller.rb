@@ -73,4 +73,19 @@ class MembersController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+  # switch to a particular user
+  def switch_user
+    m = Member.find(params[:member_id].to_i)
+    unless current_member.admin
+      flash[:notice] = "You're not authorized to switch to that user!"
+      redirect_to(root_path)
+      return
+    end
+    sign_out(current_member)
+    sign_in(m)
+    flash[:notice] = "Successfully switched to user #{current_member.name}."
+    home
+  end
+
 end

@@ -6,7 +6,9 @@ class Member < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :name1, :name2, :name3, :extra_emails, :phone, :disabled, :disabled_reason, :admin
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :name1, 
+                  :name2, :name3, :extra_emails, :phone, :disabled, :disabled_reason, 
+                  :admin, :joined_on, :service_group
 
   has_many :orders, :dependent => :destroy
   validates_presence_of :name1, :email
@@ -23,6 +25,10 @@ class Member < ActiveRecord::Base
     # would be more efficient to do this select in the db...
     Service.find_all_by_member_id(self.id).collect{ |e| e.created_at >= ServiceStartDate ? e.hours : nil }.compact.sum
   end
+
+  def start_date
+    self.joined_on.nil? ? self.created_at.to_date : self.joined_on
+  end
  
   def service_per_week
     (self.service_total/(self.days_since_service_start/7.0))
@@ -33,7 +39,7 @@ class Member < ActiveRecord::Base
   end
 
   def days_as_member
-    ((Time.now - self.created_at)/(2400*24)).ceil
+    ((Time.now - self.start_date.to_time)/(2400*24)).ceil
   end
 
   class Month<Date
@@ -47,7 +53,7 @@ class Member < ActiveRecord::Base
 
   def consecutive_months_under_service
     cur = Month.new(Time.now.year,Time.now.month)
-    first = Month.new(self.created_at.year,self.created_at.month)
+    first = Month.new(self.start_date.year,self.start_date.month)
     thresh = Setting.first.workshare_hours_per_month
     return 0 if thresh.nil?
     # start at -1 because we're considering the current month too

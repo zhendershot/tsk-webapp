@@ -5,16 +5,17 @@
   </div>
 
   <table>
-  <tr><th>Check or<th>Hours<th>Name<th>Task</tr>
+  <tr><th>Check or<th>Hours<th>Name<th>Workshare Group<th>Task</tr>
   <%
   # precompute quantities to speed things up a bit
-  Member.all(:order => :name1).each{ |member|
+  Member.all(:order => [:service_group,:name1]).each{ |member|
   %>
     <tr>
     <td><input type="checkbox" name="service[done][<%= member.id %>]" id="service_done_<%= member.id %>" value="1" \>
     <td><input type="text" name="service[hours][<%= member.id %>]" 
                id="service_hours_<%= member.id %>" size=4"/>
     <td><%= member.name %>
+    <td><%= member.service_group %>
     <td><input type="text" name="service[task][<%= member.id %>]" 
                id="service_task_<%= member.id %>" size="30"/>
   <% } %>

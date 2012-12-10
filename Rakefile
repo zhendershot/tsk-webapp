@@ -11,6 +11,7 @@ task(:nightly => :environment) do
   # disable any users who are behind on workshare
   thresh = settings.num_months_under_disable
   Member.all.each{ |m|
+    next if m.admin # admin can't have their account disabled
     under = m.consecutive_months_under_service 
     if under >= thresh and !m.disabled
       puts "#{m} workshare disabling"
@@ -48,7 +49,7 @@ task(:nightly => :environment) do
         m.save
       end
     end
-    anniversary = m.created_at.to_date >> 12
+    anniversary = m.start_date >> 12
     while anniversary < Date.today
       year = anniversary.year
       annual_fee = Fee.where("member_id=#{m.id} AND kind='annual:#{year}'").first

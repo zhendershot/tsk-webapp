@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121009224651) do
+ActiveRecord::Schema.define(:version => 20121210022229) do
 
   create_table "fees", :force => true do |t|
     t.string   "kind"
@@ -49,6 +49,8 @@ ActiveRecord::Schema.define(:version => 20121009224651) do
     t.boolean  "disabled",               :default => false
     t.text     "disabled_reason"
     t.string   "auto_disabled_type"
+    t.date     "joined_on"
+    t.string   "service_group"
   end
 
   add_index "members", ["email"], :name => "index_members_on_email"

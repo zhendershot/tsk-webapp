@@ -1,4 +1,15 @@
-<h1>Settings</h1>
+<h1>Admin Stuff</h1>
+
+<h2>Switch to User</h2>
+
+<%= form_tag("/members/switch_user", :method => "get") do %>
+  <%= select_tag(:member_id, options_for_select(Member.find(:all, :order => 'name1').collect{ |v| [v.name,v.id] })) %>
+  <br />
+  <%= submit_tag "Switch" %>
+<% end %>
+<br><br>
+
+<h2>Settings</h2>
 <%= form_for(@settings) do |f| %>
   <div class="field">
     <%= f.label :sales_tax_percent %><br />

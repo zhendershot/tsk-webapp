@@ -14,7 +14,7 @@ class Member < ActiveRecord::Base
   validates_presence_of :name1, :email
   validates_uniqueness_of :email
 
-  ServiceStartDate = Time.local(2011,11,01)
+  ServiceStartDate = Time.local(2013,01,01)
   HoursPerMonth = 2.0
   
   def name
@@ -35,7 +35,7 @@ class Member < ActiveRecord::Base
   end
 
   def service_per_month
-    self.service_total/self.months_since_service_start
+    self.months_since_service_start == 0 ? 0.0 : self.service_total/self.months_since_service_start
   end
 
   def days_as_member
@@ -53,7 +53,8 @@ class Member < ActiveRecord::Base
 
   def consecutive_months_under_service
     cur = Month.new(Time.now.year,Time.now.month)
-    first = Month.new(self.start_date.year,self.start_date.month)
+    #first = Month.new(self.start_date.year,self.start_date.month)
+    first = Month.new(ServiceStartDate.year,ServiceStartDate.month)
     thresh = Setting.first.workshare_hours_per_month
     return 0 if thresh.nil?
     # start at -1 because we're considering the current month too

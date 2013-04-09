@@ -49,33 +49,15 @@ task(:nightly => :environment) do
         m.save
       end
     end
-    anniversary = m.start_date >> 12
-    while anniversary < Date.today
-      year = anniversary.year
-      annual_fee = Fee.where("member_id=#{m.id} AND kind='annual:#{year}'").first
-      if annual_fee.nil?
-        puts "#{m} annualfee:#{year} creating"
-        f = Fee.new
-        f.amount = settings.annual_fee
-        f.due = Date.today + settings.annual_fee_slack_days
-        f.kind = "annual:#{year}"
-        f.member = m
-        f.save
-      else
-        if !annual_fee.paid and annual_fee.due < Date.today and !m.disabled
-          puts "#{m} annualfee:#{year} disabling"
-          m.disabled = true
-          m.disabled_reason = "annual fee of ($#{annual_fee.amount}) hasn't been paid and was due #{annual_fee.due}"
-          m.auto_disabled_type = "annualfee:#{year}"
-          m.save
-        elsif annual_fee.paid and m.disabled and m.auto_disabled_type == "annualfee:#{year}"
-          puts "#{m} annualfee:#{year} re-enabling"
-          m.disabled = false
-          m.paid
-        end
-      end 
-      anniversary = anniversary >> 12
+
+    fees.each do |fee| 
+      if !fee.paid && fee.due < Date.today
+        puts "#{m} disabled from unpaid fee"
+        m.disabled
+        m.save
+      end
     end
+  
   }
 end
 

@@ -26,7 +26,8 @@ task(:nightly => :environment) do
     end
   }
   # generate fees, and penalize members for not paying them, as necessary
-  Member.all.each{ |m|
+    Member.all.each{ |m|
+    fees = Fee.where(:member_id => m.id)
     startup_fee = Fee.where("member_id=#{m.id} AND kind='startup'").first
     if startup_fee.nil?
       puts "#{m} startupfee creating"

@@ -30,7 +30,7 @@ class FeesController < ApplicationController
   # GET /fees.json
   def index
     @fees = Fee.all
-
+    @fees.sort!{|x, y| y.member.created_at <=> x.member.created_at}
     respond_to do |format|
       format.html { render :index }# index.html.erb
       format.json { render json: @fees }
@@ -38,7 +38,6 @@ class FeesController < ApplicationController
   end
 
   # GET /fees/new
-  # GET /fees/new.json
   def new
     @fee = Fee.new
 
